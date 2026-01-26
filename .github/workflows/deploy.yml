@@ -25,3 +25,17 @@ jobs:
 
       - name: Push Docker image
         run: docker push natacha6262/schoolproject-app:v1
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy on Windows Server via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            powershell.exe -ExecutionPolicy Bypass -File C:\deploy\deploy.ps1
