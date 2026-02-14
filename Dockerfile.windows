@@ -12,9 +12,6 @@ RUN Expand-Archive -Path "C:\\node.zip" -DestinationPath "C:\\node"
 # Ajouter Node au PATH
 ENV PATH="C:\\node\\node-v18.19.0-win-x64;${PATH}"
 
-# Supprimer le zip uniquement s'il existe
-RUN if (Test-Path 'C:\\node.zip') { Remove-Item 'C:\\node.zip' }
-
 # Dossier de travail
 WORKDIR C:\\app
 
