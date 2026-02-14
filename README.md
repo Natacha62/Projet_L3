@@ -13,7 +13,7 @@ Il nous permet d'appréhender les notions de backend et frontend, mais égalemen
 
 1. Clonez le dépôt :
 ```bash
-    git clone https://github.com/Plouis-Dnx/SchoolProject.git
+    git clone https://github.com/Natacha62/Projet_L3.git
 ```
 
 2. Ouvrez l'invite de commande et déplacez-vous dans le dossier clôné :
@@ -46,5 +46,3 @@ Voici comment se présente la consultation d'un film :
 ![Capture d'écran](Images/Films.png)
 
 ![Capture d'écran](Images/Modale.png)
-
-<!-- test2 ci/cd -->

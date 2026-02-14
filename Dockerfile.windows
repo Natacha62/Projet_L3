@@ -1,26 +1,17 @@
-# Image Windows Server Core compatible Windows Server 2019
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
-# Installer Node.js 18 (version Windows)
-ADD https://nodejs.org/dist/v18.17.1/node-v18.17.1-win-x64.zip C:\\node.zip
+ADD https://nodejs.org/dist/v18.19.0/node-v18.19.0-win-x64.zip C:\node.zip
 
-RUN powershell -Command \
-    Expand-Archive C:\\node.zip -DestinationPath C:\\node ; \
-    Remove-Item C:\\node.zip ; \
-    setx PATH "$env:PATH;C:\\node"
+RUN powershell -Command "Expand-Archive C:\node.zip -DestinationPath C:\node; Remove-Item C:\node.zip"
 
-# Définir le dossier de travail
-WORKDIR C:/app
+RUN setx PATH "%PATH%;C:\node\node-v18.19.0-win-x64"
 
-# Copier les fichiers package.json et installer les dépendances
-COPY package*.json ./
-RUN npm install
+WORKDIR /app
 
-# Copier le reste du projet
 COPY . .
 
-# Exposer le port utilisé par ton serveur Express
+RUN powershell -Command "npm install"
+
 EXPOSE 3000
 
-# Commande de démarrage
 CMD ["node", "server.js"]
