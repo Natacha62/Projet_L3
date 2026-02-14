@@ -1,17 +1,28 @@
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
-ADD https://nodejs.org/dist/v18.19.0/node-v18.19.0-win-x64.zip C:\node.zip
+# Téléchargement de Node.js
+RUN powershell -Command "Invoke-WebRequest -Uri https://nodejs.org/dist/v18.19.0/node-v18.19.0-win-x64.zip -OutFile C:\node.zip"
 
-RUN powershell -Command "Expand-Archive C:\node.zip -DestinationPath C:\node; Remove-Item C:\node.zip"
+# Extraction de Node.js
+RUN powershell -Command "Expand-Archive -Path C:\node.zip -DestinationPath C:\node"
 
-RUN setx PATH "%PATH%;C:\node\node-v18.19.0-win-x64"
+# Ajout de Node au PATH
+ENV PATH="C:\\node\\node-v18.19.0-win-x64;${PATH}"
 
+# Nettoyage du zip
+RUN powershell -Command "Remove-Item C:\node.zip"
+
+# Dossier de travail
 WORKDIR /app
 
+# Copie du projet
 COPY . .
 
+# Installation des dépendances
 RUN powershell -Command "npm install"
 
+# Exposition du port
 EXPOSE 3000
 
+# Commande de démarrage
 CMD ["node", "server.js"]
