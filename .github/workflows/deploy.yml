@@ -1,30 +1,31 @@
-name: Build and Push Docker Image
+name: CI/CD - Deploy Windows Container
 
 on:
   push:
     branches:
       - main
-      - feature/docker-ci
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t natacha6262/schoolproject-app:v1 .
+      - name: Build Windows Docker image
+        run: |
+          docker build -f Dockerfile.windows -t natacha6262/schoolproject-app:windows .
 
-      - name: Push Docker image
-        run: docker push natacha6262/schoolproject-app:v1
+      - name: Push Windows Docker image
+        run: |
+          docker push natacha6262/schoolproject-app:windows
 
   deploy:
     needs: build-and-push
@@ -32,11 +33,10 @@ jobs:
 
     steps:
       - name: Deploy on Windows Server via SSH
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            powershell.exe -ExecutionPolicy Bypass -File C:\deploy\deploy.ps1
+            powershell C:\ci_cd_projet\scripts\deploy.ps1
