@@ -42,9 +42,9 @@ jobs:
       - name: Deploy on Windows Server via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ secrets.SERVER_HOST }}   # IP Tailscale
+          port: ${{ secrets.SERVER_PORT }}   # 22
+          username: ${{ secrets.SERVER_USER }}  # Administrateur
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             powershell C:\ci_cd_projet\scripts\deploy.ps1
