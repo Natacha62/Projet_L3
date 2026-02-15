@@ -34,12 +34,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+          sudo tailscale up --authkey ${{ secrets.TS_KEY }}
+
       - name: Deploy on Windows Server via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
           port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.ssh_private_key }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             powershell C:\ci_cd_projet\scripts\deploy.ps1
