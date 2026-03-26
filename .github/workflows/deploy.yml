@@ -25,3 +25,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             powershell C:\ci_cd_projet\scripts\deploy.ps1
+
+            //test du deploy
