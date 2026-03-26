@@ -1,7 +1,28 @@
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+
+# Utiliser PowerShell comme shell par défaut
+SHELL ["powershell", "-Command"]
+
+# Télécharger Node.js
+RUN Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.19.0/node-v18.19.0-win-x64.zip" -OutFile "C:\\node.zip"
+
+# Extraire Node.js
+RUN Expand-Archive -Path "C:\\node.zip" -DestinationPath "C:\\node"
+
+# Ajouter Node au PATH (version stable pour Windows Server Core)
+ENV PATH="C:\\node\\node-v18.19.0-win-x64;C:\\Windows\\System32;C:\\Windows;C:\\Windows\\System32\\WindowsPowerShell\\v1.0"
+
+# Dossier de travail
+WORKDIR C:\\app
+
+# Copier le projet
 COPY . .
+
+# Installer les dépendances
+RUN npm install
+
+# Exposer le port
 EXPOSE 3000
+
+# Commande de démarrage
 CMD ["node", "server.js"]
