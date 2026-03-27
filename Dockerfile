@@ -26,3 +26,5 @@ EXPOSE 3000
 
 # Commande de démarrage
 CMD ["node", "server.js"]
+
+# test démarrage de l'application
